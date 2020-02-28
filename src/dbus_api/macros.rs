@@ -84,3 +84,10 @@ macro_rules! properties_footer {
         }
     };
 }
+
+macro_rules! pre_pool_op {
+    ($x:expr) => {{
+        info!("preparing pool operation");
+        $x
+    }};
+}

@@ -288,7 +288,7 @@ pub fn rename_pool(m: &MethodInfo<MTFn<TData>, TData>) -> MethodResult {
     let mut engine = dbus_context.engine.borrow_mut();
     info!("preparing to rename pool {}", pool_uuid.to_simple_ref());
 
-    let result = engine.rename_pool(pool_uuid, new_name);
+    let result = pre_pool_op! {engine.rename_pool(pool_uuid, new_name)};
 
     if let Ok(ref test_uuid) = result {
         info!("pool renamed: uuid {}, new name {}", test_uuid, new_name);

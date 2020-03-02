@@ -88,6 +88,10 @@ macro_rules! properties_footer {
 macro_rules! pre_pool_op {
     ($x:expr) => {{
         info!("preparing pool operation");
-        $x
+        let result = $x;
+        if let Ok(ref test_uuid) = result {
+            info!("operation completed: {}", test_uuid);
+        }
+        result
     }};
 }

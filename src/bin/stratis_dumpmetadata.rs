@@ -10,5 +10,5 @@ fn main() {
     println!("Device path: {}", devpath);
 
     let bda = BDA::load(&mut OpenOptions::new().read(true).open(&devpath).unwrap()).unwrap();
-    println!("{:?}", bda)
+    println!("{:#?}", bda)
 }

@@ -1,6 +1,7 @@
 use std::env;
 
 use std::fs::OpenOptions;
+use std::io::{Seek, SeekFrom};
 
 use libstratis::engine::strat_engine::backstore::metadata::BDA;
 
@@ -9,6 +10,10 @@ fn main() {
     let devpath = args[1].clone();
     println!("Device path: {}", devpath);
 
-    let bda = BDA::load(&mut OpenOptions::new().read(true).open(&devpath).unwrap()).unwrap();
-    println!("{:#?}", bda)
+    let mut devfile = OpenOptions::new().read(true).open(&devpath).unwrap();
+
+    let bda = BDA::load(&mut devfile);
+    println!("{:#?}", bda);
+
+    devfile.seek(SeekFrom::Start(0)).unwrap();
 }

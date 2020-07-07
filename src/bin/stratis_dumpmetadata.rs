@@ -4,6 +4,9 @@ use std::fs::OpenOptions;
 use std::io::{Seek, SeekFrom};
 use std::vec::Vec;
 
+use serde_json;
+use serde_json::Value;
+
 use libstratis::engine::strat_engine::backstore::metadata::BDA;
 
 fn main() {
@@ -20,5 +23,7 @@ fn main() {
 
     //let mut buf: Vec<u8> = Vec::new();
     let loaded_state = bda.load_state(&mut devfile).unwrap();
-    println!("{:x?}", loaded_state);
+    println!("State JSON data:");
+    let state_json: Value = serde_json::from_slice(&loaded_state.unwrap()).unwrap();
+    println!("{:}", state_json);
 }

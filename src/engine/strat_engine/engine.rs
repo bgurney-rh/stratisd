@@ -197,9 +197,11 @@ impl Engine for StratEngine {
                     let (uuid, pool) =
                         StratPool::initialize(name, blockdev_paths, redundancy, key_desc.as_ref())?;
 
-                    let name = Name::new(name.to_owned());
-                    self.pools.insert(name, uuid, pool);
-                    Ok(CreateAction::Created(uuid))
+                    let stratis_name = Name::new(name.to_owned());
+                    self.pools.insert(stratis_name, uuid, pool);
+                    let result = CreateAction::Created(uuid);
+                    info!("pool created: uuid {}, name {}", result, name);
+                    Ok(result)
                 }
             }
         }
@@ -226,7 +228,9 @@ impl Engine for StratEngine {
             self.pools.insert(pool_name, uuid, pool);
             Err(err)
         } else {
-            Ok(DeleteAction::Deleted(uuid))
+            let result = DeleteAction::Deleted(uuid);
+            info!("pool destroyed: uuid {}, name {}", result, pool_name);
+            Ok(result)
         }
     }
 
@@ -258,6 +262,11 @@ impl Engine for StratEngine {
             if let Err(e) = devlinks::pool_renamed(&old_name) {
                 warn!("Pool rename symlink action failed: {}", e)
             };
+            let result = RenameAction::Renamed(uuid);
+            info!(
+                "pool renamed: uuid {}, old name {}, new name {}",
+                result, old_name, new_name
+            );
             Ok(RenameAction::Renamed(uuid))
         }
     }
